@@ -18,7 +18,7 @@ class PokemonDetailVC: UIViewController {
     @IBOutlet var typeLbl: UILabel!
     @IBOutlet var defenseLbl: UILabel!
     @IBOutlet var heightLbl: UILabel!
-    @IBOutlet var pokedexLbl: NSLayoutConstraint!
+    @IBOutlet var pokedexLbl: UILabel!
     @IBOutlet var wightLbl: UILabel!
     @IBOutlet var attackLbl: UILabel!
     
@@ -31,12 +31,17 @@ class PokemonDetailVC: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
 
-        nameLb.text = pokemon.name
+        nameLb.text = pokemon.name.capitalized
+        
+        let img = UIImage(named: "\(pokemon.pokedexId)")
+        mainImg.image = img
+        currentEvoImg.image = img
+        pokedexLbl.text = "\(pokemon.pokedexId)"
+        
         
         pokemon.downloadPokemonDetail {
             
             //IT'LL ONLY CALL AFTER NETWORS IS COMPLETED
-            
             self.updateUI()
         }
         
@@ -44,6 +49,28 @@ class PokemonDetailVC: UIViewController {
     }
 
     func updateUI(){
+        
+        attackLbl.text = pokemon.attack
+        defenseLbl.text = pokemon.defense
+        heightLbl.text = pokemon.height
+        wightLbl.text = pokemon.weight
+        typeLbl.text = pokemon.type
+        
+        descriptionLabel.text = pokemon.description 
+        
+        if pokemon.nextEvolutionID == "" {
+            
+            evoLbl.text = "No Evolutions"
+            nextEvoImg.isHidden = true
+            
+        } else{
+            
+            nextEvoImg.isHidden = false
+            nextEvoImg.image = UIImage(named: pokemon.nextEvolutionID)
+            let str = "Next Evolution: \(pokemon.nextEvolutionName) - \(pokemon.nextEvolutionLevel)"
+            
+            evoLbl.text = str
+        }
         
     }
     
